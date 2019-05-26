@@ -1,21 +1,21 @@
 int Solution::braces(string A) {
     stack<char> stk;
-    for(int i=0; i<A.length(); i++) {
+    for(int i = 0; i < A.size(); i++) {
         if(A[i] == ')') {
-            char top = stk.top();
+            char c = stk.top();
             stk.pop();
             bool flag = true;
-            while(top != '(') {
-                if(top == '*' || top == '/' || top == '+' || top == '-')
+            while(c != '(') {
+                if(c == '+' || c == '-' || c == '*' || c == '/') {
                     flag = false;
-                top = stk.top();
+                }
+                c = stk.top();
                 stk.pop();
             }
-            if(flag == true)
-                return true;
+            if(flag)
+                return flag;
         }
-        else if(A[i] == '(' || A[i] == '+' || A[i] == '-' || A[i] == '*'
-            || A[i] == '/')
+        else
             stk.push(A[i]);
     }
     return false;
