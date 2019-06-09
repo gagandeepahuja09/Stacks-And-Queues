@@ -1,38 +1,25 @@
 string Solution::simplifyPath(string A) {
     stack<string> stk;
-    string res = "/";
-    string dir;
-    for(int i=0; i < A.length(); i++) {
-        dir.clear();
-        while(A[i] == '/')
-            i++;
-        while(i < A.length() && A[i] != '/') {
-            dir += A[i];
-            i++;    
+    for(int i = 0; i < A.size(); i++) {
+        if(i < A.size() - 1 && A[i] == '.' && A[i + 1] == '.' && !stk.empty()) {
+            stk.pop();
         }
-        if(dir == "..") {
-            if(!stk.empty())
-                stk.pop();
+        else if(A[i] != '.' && A[i] != '/') {
+            string s = "";
+            while(i < A.size() && A[i] != '.' && A[i] != '/') {
+                s += A[i];
+                i++;
+            }
+            stk.push(s);
         }
-        else if(dir == ".")
-            continue;
-        else if(dir.length()) {
-            stk.push(dir);
-        }    
     }
-    stack<string> temp;
+    string ret;
+    if(stk.empty())
+        return "/";
     while(!stk.empty()) {
-        temp.push(stk.top());
+        ret = '/' + stk.top() + ret;
         stk.pop();
     }
-    while(!temp.empty()) {
-        string s = temp.top();
-        if(temp.size() > 1)
-            res += (s + "/");
-        else
-            res += s;
-        temp.pop();    
-    }
-    return res;
+    return ret;
 }
 
