@@ -1,23 +1,22 @@
 int Solution::braces(string A) {
-    stack<char> stk;
+    stack<int> stk;
     for(int i = 0; i < A.size(); i++) {
         if(A[i] == ')') {
-            char c = stk.top();
-            stk.pop();
-            bool flag = true;
-            while(c != '(') {
-                if(c == '+' || c == '-' || c == '*' || c == '/') {
-                    flag = false;
-                }
-                c = stk.top();
-                stk.pop();
+            int ans = 0;
+            while(stk.top() != '(') {
+                if(stk.top() == '-' ||  stk.top() == '+' || stk.top() == '/' 
+                || stk.top() == '*')
+                    ans = 1;
+                stk.pop();    
             }
-            if(flag)
-                return flag;
+            if(!stk.empty())
+                stk.pop();
+            if(!ans)
+                return 1;
         }
         else
             stk.push(A[i]);
     }
-    return false;
+    return 0;
 }
 
