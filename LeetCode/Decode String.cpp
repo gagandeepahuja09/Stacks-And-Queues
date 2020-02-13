@@ -1,36 +1,36 @@
 class Solution {
 public:
     string decodeString(string s) {
-        stack<int> count;
-        vector<string> resStk;
-        string res = "";
-        int i = 0; 
-        while(i < s.size()) {
+        stack<int> numStk;
+        stack<string> strStk;
+        strStk.push("");
+        for(int i = 0; i < s.size(); i++) {
             if(s[i] >= '1' && s[i] <= '9') {
                 int num = 0;
-                while(i < s.size() && s[i] >= '0' && s[i] <= '9') {
+                while(s[i] >= '0' && s[i] <= '9')
                     num = num * 10 + (s[i++] - '0');
-                }
-                count.push(num);
+                i--;
+                numStk.push(num);
             }
             else if(s[i] == '[') {
-                resStk.push_back(res);
-                res = "";
-                i++;
+                string s;
+                strStk.push(s);
             }
             else if(s[i] == ']') {
-                int c = count.top(); count.pop();
-                string temp = resStk.back(); resStk.pop_back();
-                for(int j = 0; j < c; j++) {
-                    temp += res;
-                }
-                res = temp;
-                i++;
+                string temp = strStk.top(); strStk.pop();
+                int count = numStk.top();   numStk.pop();
+                string repeated;
+                while(count--)
+                    repeated += temp;
+                if(strStk.size())
+                    strStk.top() += repeated;
+                else
+                    strStk.push(repeated);
             }
             else {
-                res += s[i++];
+                strStk.top() += s[i];
             }
         }
-        return res;
+        return strStk.empty() ? "" : strStk.top();
     }
 };
