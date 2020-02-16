@@ -1,25 +1,23 @@
 class Solution {
 public:
-    bool find132pattern(vector<int>& A) {
-        if(A.size() < 3)
+    bool find132pattern(vector<int>& nums) {
+        int n = nums.size();
+        if(n < 3)
             return false;
-        int n = A.size();
-        vector<int> mn(n);
-        mn[0] = A[0];
-        for(int i = 1; i < A.size(); i++)
-            mn[i] = min(mn[i - 1], A[i]);
+        vector<int> minLeft(n, INT_MAX);
+        minLeft[0] = nums[0];
+        for(int i = 1; i < n; i++) {
+            minLeft[i] = min(minLeft[i - 1], nums[i]);
+        }
         stack<int> stk;
-        for(int j = A.size() - 1; j >= 0; j--) {
-            if(mn[j] < A[j]) {
-                // aj is j, mnj is i
-                while(!stk.empty() && stk.top() <= mn[j]) {
+        for(int i = n - 1; i >= 0; i--) {
+            if(minLeft[i] < nums[i]) {
+                while(!stk.empty() && stk.top() <= minLeft[i])
                     stk.pop();
-                }
-                // stk.top is k
-                if(!stk.empty() && stk.top() < A[j]) {
+                if(!stk.empty() && stk.top() < nums[i]) {
                     return true;
                 }
-                stk.push(A[j]);
+                stk.push(nums[i]);
             }
         }
         return false;
